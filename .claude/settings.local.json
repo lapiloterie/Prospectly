@@ -1,7 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "Bash(find /c/Users/sandax/Desktop/dev/prospectly -type d ! -path \"*/node_modules/*\" ! -path \"*/.next/*\" ! -name \"{app*\")"
+      "Bash(find /c/Users/sandax/Desktop/dev/prospectly -type d ! -path \"*/node_modules/*\" ! -path \"*/.next/*\" ! -name \"{app*\")",
+      "Bash(rtk git:*)"
     ]
   }
 }
