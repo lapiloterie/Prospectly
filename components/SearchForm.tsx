@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useMemo } from 'react'
-import { Search, MapPin, Crosshair, ChevronDown, Briefcase, PenLine, Globe } from 'lucide-react'
+import { Search, MapPin, ChevronDown, Briefcase, PenLine, Globe } from 'lucide-react'
 import type { SearchParams } from '@/lib/types'
 import { METIERS, REGIONS_FR } from '@/lib/metiers'
 import { DEPARTEMENTS } from '@/lib/departements'
@@ -13,7 +13,7 @@ interface SearchFormProps {
 
 export function SearchForm({ onSearch, loading }: SearchFormProps) {
   const [city, setCity]                   = useState('')
-  const [radius, setRadius]               = useState('50km')
+  const [radiusKm, setRadiusKm]           = useState(50)
   const [region, setRegion]               = useState('')
   const [departement, setDepartement]     = useState('')
   const [metierKey, setMetierKey]         = useState('')   // '' | 'autre' | métier.query
@@ -41,7 +41,7 @@ export function SearchForm({ onSearch, loading }: SearchFormProps) {
     onSearch({
       businessType: effectiveBusinessType,
       city: city.trim() || undefined,
-      radius,
+      radius: `${radiusKm}km`,
       region: region || undefined,
       departement: departement || undefined,
     })
@@ -109,7 +109,7 @@ export function SearchForm({ onSearch, loading }: SearchFormProps) {
       </div>
 
       {/* Row 2 : Ville | Rayon */}
-      <div className="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-3">
+      <div className="grid grid-cols-1 md:grid-cols-[1fr_280px] gap-3">
 
         {/* Ville */}
         <div className="relative group">
@@ -123,22 +123,42 @@ export function SearchForm({ onSearch, loading }: SearchFormProps) {
           />
         </div>
 
-        {/* Rayon */}
-        <div className="relative group">
-          <Crosshair className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-text-tertiary group-focus-within:text-accent transition-colors pointer-events-none" />
-          <select
-            value={radius}
-            onChange={(e) => setRadius(e.target.value)}
-            className={selectClass}
-          >
-            <option value="5km">5 km</option>
-            <option value="10km">10 km</option>
-            <option value="25km">25 km</option>
-            <option value="50km">50 km</option>
-            <option value="75km">75 km</option>
-            <option value="100km">100 km</option>
-          </select>
-          <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-tertiary pointer-events-none" />
+        {/* Rayon slider */}
+        <div className="bg-surface-2 border border-border rounded-xl px-4 py-3 flex flex-col justify-center gap-1.5">
+          <div className="flex items-center justify-between">
+            <span className="text-xs text-text-tertiary">Rayon</span>
+            <span className="text-sm font-semibold text-accent tabular-nums">{radiusKm} km</span>
+          </div>
+          <input
+            type="range"
+            min={1}
+            max={500}
+            step={1}
+            value={radiusKm}
+            onChange={(e) => setRadiusKm(Number(e.target.value))}
+            className="w-full h-1.5 appearance-none rounded-full cursor-pointer
+              bg-surface-4
+              [&::-webkit-slider-thumb]:appearance-none
+              [&::-webkit-slider-thumb]:w-4
+              [&::-webkit-slider-thumb]:h-4
+              [&::-webkit-slider-thumb]:rounded-full
+              [&::-webkit-slider-thumb]:bg-accent
+              [&::-webkit-slider-thumb]:cursor-pointer
+              [&::-webkit-slider-thumb]:shadow-[0_0_8px_rgba(232,255,71,0.4)]
+              [&::-moz-range-thumb]:w-4
+              [&::-moz-range-thumb]:h-4
+              [&::-moz-range-thumb]:rounded-full
+              [&::-moz-range-thumb]:bg-accent
+              [&::-moz-range-thumb]:border-0
+              [&::-moz-range-thumb]:cursor-pointer"
+            style={{
+              background: `linear-gradient(to right, #e8ff47 0%, #e8ff47 ${(radiusKm / 500) * 100}%, #272727 ${(radiusKm / 500) * 100}%, #272727 100%)`
+            }}
+          />
+          <div className="flex justify-between text-[10px] text-text-tertiary">
+            <span>1 km</span>
+            <span>500 km</span>
+          </div>
         </div>
       </div>
 

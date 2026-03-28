@@ -39,4 +39,10 @@ export const REGIONS_FR: string[] = [
   'Occitanie',
   'Pays de la Loire',
   "Provence-Alpes-Côte d'Azur",
+  // DROM
+  'Guadeloupe',
+  'Martinique',
+  'Guyane',
+  'La Réunion',
+  'Mayotte',
 ]
